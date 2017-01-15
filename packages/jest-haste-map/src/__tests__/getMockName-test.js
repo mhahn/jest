@@ -14,11 +14,17 @@ const getMockName = require('../getMockName');
 describe('getMockName', () => {
   it('extracts mock name from file path', () => {
     expect(
-      getMockName(path.join('a', '__mocks__', 'c.js'))
+      getMockName(path.join('a', '__mocks__', 'c.js'), true)
     ).toBe('c');
 
     expect(
-      getMockName(path.join('a', '__mocks__', 'c', 'd.js'))
+      getMockName(path.join('a', '__mocks__', 'c', 'd.js'), true)
     ).toBe(path.join('c', 'd'));
+  });
+
+  it('does nothing if uniqueMockNames is not enabled', () => {
+    expect(
+      getMockName(path.join('a', '__mocks__', 'c.js'), false)
+    ).toBe('a/__mocks__/c.js');
   });
 });

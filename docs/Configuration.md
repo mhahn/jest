@@ -72,6 +72,7 @@ These options let you control Jest's behavior in your `package.json` file. The J
   - [`timers` [string]](#timers-string)
   - [`transform` [object<string, string>]](#transform-object-string-string)
   - [`transformIgnorePatterns` [array<string>]](#transformignorepatterns-array-string)
+  - [`uniqueMockNames` [boolean]](#uniquemocknames-boolean)
   - [`unmockedModulePathPatterns` [array<string>]](#unmockedmodulepathpatterns-array-string)
   - [`verbose` [boolean]](#verbose-boolean)
 
@@ -443,6 +444,11 @@ Examples of such compilers include [babel](https://babeljs.io/), [typescript](ht
 An array of regexp pattern strings that are matched against all source file paths before transformation. If the test path matches any of the patterns, it will not be transformed.
 
 These pattern strings match against the full path. Use the `<rootDir>` string token to  include the path to your project's root directory to prevent it from accidentally ignoring all of your files in different environments that may have different root directories. Example: `["<rootDir>/bower_components/", "<rootDir>/node_modules/"]`.
+
+### `uniqueMockNames` [boolean]
+(default: `true`)
+
+Requires mock filenames to be unique within a project.
 
 ### `unmockedModulePathPatterns` [array<string>]
 (default: `[]`)

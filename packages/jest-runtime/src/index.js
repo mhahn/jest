@@ -44,6 +44,7 @@ type HasteMapOptions = {|
   console?: Console,
   maxWorkers: number,
   resetCache: boolean,
+  uniqueMockNames?: boolean,
   watch?: boolean,
 |};
 
@@ -171,6 +172,7 @@ class Runtime {
     options: {
       console?: Console,
       maxWorkers: number,
+      uniqueMockNames?: boolean,
       watch?: boolean,
     },
   ): Promise<HasteContext> {
@@ -179,6 +181,7 @@ class Runtime {
       console: options.console,
       maxWorkers: options.maxWorkers,
       resetCache: !config.cache,
+      uniqueMockNames: options.uniqueMockNames,
       watch: options.watch,
     });
     return instance.build().then(

@@ -49,6 +49,7 @@ export type DefaultConfig = {|
   testURL: string,
   timers: 'real' | 'fake',
   transformIgnorePatterns: Array<Glob>,
+  uniqueMockNames: boolean,
   useStderr: boolean,
   verbose: ?boolean,
   watch: boolean,

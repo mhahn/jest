@@ -52,6 +52,7 @@ type Options = {
   retainAllFiles: boolean,
   roots: Array<string>,
   throwOnModuleCollision?: boolean,
+  uniqueMockNames?: boolean,
   useWatchman?: boolean,
   watch?: boolean,
 };
@@ -69,6 +70,7 @@ type InternalOptions = {
   retainAllFiles: boolean,
   roots: Array<string>,
   throwOnModuleCollision: boolean,
+  uniqueMockNames: boolean,
   useWatchman: boolean,
   watch: boolean,
 };
@@ -207,6 +209,8 @@ class HasteMap extends EventEmitter {
       retainAllFiles: options.retainAllFiles,
       roots: Array.from(new Set(options.roots)),
       throwOnModuleCollision: !!options.throwOnModuleCollision,
+      uniqueMockNames:
+        options.uniqueMockNames == null ? true : options.uniqueMockNames,
       useWatchman:
         options.useWatchman == null ? true : options.useWatchman,
       watch: !!options.watch,
@@ -327,7 +331,7 @@ class HasteMap extends EventEmitter {
       this._options.mocksPattern &&
       this._options.mocksPattern.test(filePath)
     ) {
-      const mockPath = getMockName(filePath);
+      const mockPath = getMockName(filePath, this._options.uniqueMockNames);
       if (mocks[mockPath]) {
         this._console.warn(
           `jest-haste-map: duplicate manual mock found:\n` +
@@ -617,7 +621,7 @@ class HasteMap extends EventEmitter {
           this._options.mocksPattern &&
           this._options.mocksPattern.test(filePath)
         ) {
-          const mockName = getMockName(filePath);
+          const mockName = getMockName(filePath, this._options.uniqueMockNames);
           delete hasteMap.mocks[mockName];
         }
 

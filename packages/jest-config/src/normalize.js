@@ -430,6 +430,7 @@ function normalize(config, argv) {
       case 'testRunner':
       case 'testURL':
       case 'timers':
+      case 'uniqueMockNames':
       case 'updateSnapshot':
       case 'verbose':
       case 'watchman':

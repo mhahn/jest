@@ -55,6 +55,7 @@ module.exports = ({
   testURL: 'about:blank',
   timers: 'real',
   transformIgnorePatterns: [NODE_MODULES_REGEXP],
+  uniqueMockNames: true,
   useStderr: false,
   verbose: null,
   watch: false,
