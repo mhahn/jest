@@ -187,7 +187,12 @@ class Resolver {
   }
 
   getMockModule(from: Path, name: string): ?Path {
-    const mock = this._moduleMap.getMockModule(name);
+    let mockName = name;
+    if (name[0] === '.') {
+      mockName = path.join(path.dirname(from), name);
+    }
+
+    const mock = this._moduleMap.getMockModule(mockName);
     if (mock) {
       return mock;
     } else {

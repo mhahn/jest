@@ -47,8 +47,9 @@ type HasteMapOptions = {|
   watch?: boolean,
 |};
 
-type InternalModuleOptions = {|
-  isInternalModule: boolean,
+type RequireModuleOptions = {|
+  isInternalModule?: boolean,
+  shouldMock?: boolean,
 |};
 
 const NODE_MODULES = path.sep + 'node_modules' + path.sep;
@@ -213,6 +214,7 @@ class Runtime {
       providesModuleNodeModules: config.haste.providesModuleNodeModules,
       resetCache: options && options.resetCache,
       retainAllFiles: false,
+      rootDir: config.rootDir,
       roots: config.testPathDirs,
       useWatchman: config.watchman,
       watch: options && options.watch,
@@ -246,7 +248,7 @@ class Runtime {
   requireModule(
     from: Path,
     moduleName?: string,
-    options: ?InternalModuleOptions,
+    options: ?RequireModuleOptions,
   ) {
     const moduleID = this._normalizeID(from, moduleName);
     let modulePath;
@@ -255,10 +257,14 @@ class Runtime {
       this._moduleRegistry :
       this._internalModuleRegistry;
 
+    const shouldMock = options && options.shouldMock != null ?
+      options.shouldMock :
+      true;
+
     // Some old tests rely on this mocking behavior. Ideally we'll change this
     // to be more explicit.
     const moduleResource = moduleName && this._resolver.getModule(moduleName);
-    const manualMock =
+    const manualMock = shouldMock &&
       moduleName && this._resolver.getMockModule(from, moduleName);
     if (
       (!options || !options.isInternalModule) &&
@@ -366,7 +372,7 @@ class Runtime {
     if (this._shouldMock(from, moduleName)) {
       return this.requireMock(from, moduleName);
     } else {
-      return this.requireModule(from, moduleName);
+      return this.requireModule(from, moduleName, {shouldMock: false});
     }
   }
 
@@ -419,7 +425,7 @@ class Runtime {
     return to ? this._resolver.resolveModule(from, to) : from;
   }
 
-  _execModule(localModule: Module, options: ?InternalModuleOptions) {
+  _execModule(localModule: Module, options: ?RequireModuleOptions) {
     // If the environment was disposed, prevent this module from being executed.
     if (!this._environment.global) {
       return;
@@ -625,7 +631,7 @@ class Runtime {
 
   _createRequireImplementation(
     from: Path,
-    options: ?InternalModuleOptions,
+    options: ?RequireModuleOptions,
   ) {
     const moduleRequire = options && options.isInternalModule
       ? (moduleName: string) => this.requireInternalModule(from, moduleName)
